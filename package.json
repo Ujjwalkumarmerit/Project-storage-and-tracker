@@ -8,6 +8,6 @@
     "dev": "cd backend && npm run dev"
   },
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   }
 }
