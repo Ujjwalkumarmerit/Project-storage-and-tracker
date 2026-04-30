@@ -3,8 +3,8 @@ services:
     name: project-storage-tracker-api
     runtime: node
     plan: free
-    buildCommand: "cd backend && npm ci && npx prisma generate && npx prisma db push"
-    startCommand: "cd backend && node src/server.js"
+    buildCommand: "bash build.sh"
+    startCommand: "cd backend && npm start"
     envVars:
       - key: NODE_ENV
         value: production
