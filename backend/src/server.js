@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
@@ -12,17 +11,25 @@ const app = express();
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    process.env.FRONTEND_URL || 'http://localhost:5173'
+  ],
+  credentials: true
+}));
 app.use(express.json());
-
-// Serve static files from frontend build
-const frontendBuildPath = path.join(__dirname, '../../frontend/dist');
-app.use(express.static(frontendBuildPath));
 
 // Set up Prisma on req so routes can use it without multiple imports
 app.use((req, res, next) => {
   req.prisma = prisma;
   next();
+});
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date() });
 });
 
 app.use('/api/auth', authRoutes);
@@ -57,11 +64,6 @@ app.get('/api/dashboard', require('./middleware/auth').auth, async (req, res) =>
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch dashboard stats' });
   }
-});
-
-// Serve React app for all non-API routes (SPA fallback)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendBuildPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
