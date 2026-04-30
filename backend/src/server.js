@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
@@ -13,6 +14,10 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from frontend build
+const frontendBuildPath = path.join(__dirname, '../../frontend/dist');
+app.use(express.static(frontendBuildPath));
 
 // Set up Prisma on req so routes can use it without multiple imports
 app.use((req, res, next) => {
@@ -52,6 +57,11 @@ app.get('/api/dashboard', require('./middleware/auth').auth, async (req, res) =>
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch dashboard stats' });
   }
+});
+
+// Serve React app for all non-API routes (SPA fallback)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendBuildPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
