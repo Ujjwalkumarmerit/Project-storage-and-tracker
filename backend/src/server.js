@@ -8,7 +8,13 @@ const taskRoutes = require('./routes/tasks');
 const { PrismaClient } = require('@prisma/client');
 
 const app = express();
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+});
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
