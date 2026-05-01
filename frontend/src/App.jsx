@@ -636,6 +636,12 @@ function AuthScreen({ db, setDb, setSession, mode, setMode, toast }) {
 
   const isLogin = mode === "login";
 
+  const DEMO_ACCOUNTS = [
+    { id: "u1", name: "Alex Morgan", email: "admin@projectflow.io", password: "admin123", role: "admin", color: "#4F46E5" },
+    { id: "u2", name: "Jamie Lee", email: "jamie@projectflow.io", password: "jamie123", role: "manager", color: "#0D9488" },
+    { id: "u3", name: "Sam Rivera", email: "sam@projectflow.io", password: "sam123", role: "member", color: "#7C3AED" },
+  ];
+
   return (
     <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'DM Sans', sans-serif", background: C.bg }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');*{box-sizing:border-box}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}`}</style>
@@ -675,10 +681,10 @@ function AuthScreen({ db, setDb, setSession, mode, setMode, toast }) {
             </button>
           </p>
 
-          {isLogin && db?.users && (
+          {isLogin && (
             <div style={{ marginTop: 28, padding: 16, background: C.accentLight, borderRadius: 12, border: `1px solid ${C.accent}22` }}>
               <p style={{ margin: "0 0 10px", fontSize: 11, fontWeight: 700, color: C.accentDark, textTransform: "uppercase", letterSpacing: 0.5 }}>Quick Access — Demo Accounts</p>
-              {db.users.slice(0, 5).map(u => (
+              {DEMO_ACCOUNTS.map(u => (
                 <button key={u.id} onClick={() => setForm({ ...form, email: u.email, password: u.password })}
                   style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "8px 10px", marginBottom: 4, borderRadius: 8, border: `1px solid ${C.accent}30`, background: C.white, cursor: "pointer", textAlign: "left" }}>
                   <Avatar name={u.name} color={u.color} size={28} />
