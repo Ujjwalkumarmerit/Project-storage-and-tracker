@@ -176,7 +176,7 @@ const inp = { width: "100%", padding: "10px 13px", border: `1.5px solid ${C.bord
 const btn = (v = "primary", size = "md") => ({
   padding: size === "sm" ? "7px 14px" : "10px 20px", borderRadius: 9, fontSize: size === "sm" ? 13 : 14, fontWeight: 600, cursor: "pointer", border: "none", transition: "all .15s", whiteSpace: "nowrap",
   background: v === "primary" ? C.accent : v === "danger" ? C.danger : v === "success" ? C.success : v === "warning" ? C.warning : C.bg,
-  color: v === "ghost" ? C.slate : C.white,
+  color: v === "ghost" ? C.slate : "#FFFFFF",
   ...(v === "ghost" && { border: `1.5px solid ${C.border}`, background: C.white, backdropFilter: "blur(16px)" }),
 });
 
@@ -643,7 +643,7 @@ function AuthScreen({ db, setDb, setSession, mode, setMode, toast }) {
   ];
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'Inter', sans-serif", background: `radial-gradient(circle at top right, rgba(139, 92, 246, 0.15), transparent 40%), radial-gradient(circle at bottom left, rgba(20, 184, 166, 0.1), transparent 40%), ${C.navy}` }}>
+    <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'Inter', sans-serif", background: `radial-gradient(circle at top right, rgba(139, 92, 246, 0.15), transparent 40%), radial-gradient(circle at bottom left, rgba(20, 184, 166, 0.1), transparent 40%), #020617` }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');*{box-sizing:border-box}body{margin:0;color:#f8fafc;background-color:#020617;}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px}::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.2)}`}</style>
 
       <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: 40 }}>
