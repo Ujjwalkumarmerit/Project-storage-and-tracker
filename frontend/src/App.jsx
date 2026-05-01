@@ -2,8 +2,10 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 
-const API = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + "/api" : "http://localhost:5000/api";
-const SOCKET_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const IS_PROD = import.meta.env.PROD;
+const API = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL + "/api" : IS_PROD ? "/api" : "http://localhost:5000/api";
+const SOCKET_URL = import.meta.env.VITE_API_URL || (IS_PROD ? "/" : "http://localhost:5000");
+
 // ─── THEME ──────────────────────────────────────────────────────────────────
 const C = {
   navy: "#0A0F1E", navyMid: "#111827", navyLight: "#1F2937",
