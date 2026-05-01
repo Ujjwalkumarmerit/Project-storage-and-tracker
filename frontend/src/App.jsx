@@ -670,7 +670,7 @@ function AuthScreen({ db, setDb, setSession, mode, setMode, toast }) {
 
           {err && <p style={{ color: C.danger, fontSize: 13, marginBottom: 14, padding: "10px 14px", background: C.dangerLight, borderRadius: 8 }}>{err}</p>}
 
-          <button style={{ ...btn("primary"), width: "100%", padding: "13px", fontSize: 15, display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }} onClick={isLogin ? handleLogin : handleRegister} disabled={loading}>
+          <button id="signin-btn" style={{ ...btn("primary"), width: "100%", padding: "13px", fontSize: 15, display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }} onClick={isLogin ? handleLogin : handleRegister} disabled={loading}>
             {loading ? <Spinner /> : (isLogin ? "Sign in →" : "Create Account →")}
           </button>
 
@@ -685,7 +685,12 @@ function AuthScreen({ db, setDb, setSession, mode, setMode, toast }) {
             <div style={{ marginTop: 28, padding: 16, background: C.accentLight, borderRadius: 12, border: `1px solid ${C.accent}22` }}>
               <p style={{ margin: "0 0 10px", fontSize: 11, fontWeight: 700, color: C.accentDark, textTransform: "uppercase", letterSpacing: 0.5 }}>Quick Access — Demo Accounts</p>
               {DEMO_ACCOUNTS.map(u => (
-                <button key={u.id} onClick={() => setForm({ ...form, email: u.email, password: u.password })}
+                <button key={u.id} onClick={() => {
+                  setForm({ ...form, email: u.email, password: u.password });
+                  setTimeout(() => {
+                    document.getElementById("signin-btn").click();
+                  }, 50);
+                }}
                   style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "8px 10px", marginBottom: 4, borderRadius: 8, border: `1px solid ${C.accent}30`, background: C.white, cursor: "pointer", textAlign: "left" }}>
                   <Avatar name={u.name} color={u.color} size={28} />
                   <div style={{ flex: 1 }}>
