@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcrypt');
 const prisma = new PrismaClient();
 
 const C = {
@@ -40,7 +41,8 @@ async function main() {
   ];
   
   for (const u of users) {
-    await prisma.user.create({ data: u });
+    const hashedPassword = await bcrypt.hash(u.password, 10);
+    await prisma.user.create({ data: { ...u, password: hashedPassword } });
   }
 
   console.log("Seeding Projects...");
