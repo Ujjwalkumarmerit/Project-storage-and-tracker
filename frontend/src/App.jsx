@@ -8,18 +8,18 @@ const SOCKET_URL = import.meta.env.VITE_API_URL || (IS_PROD ? "/" : "http://loca
 
 // ─── THEME ──────────────────────────────────────────────────────────────────
 const C = {
-  navy: "#0A0F1E", navyMid: "#111827", navyLight: "#1F2937",
-  slate: "#374151", muted: "#6B7280", border: "#E5E7EB",
-  bg: "#F9FAFB", white: "#FFFFFF",
-  accent: "#4F46E5", accentLight: "#EEF2FF", accentDark: "#3730A3",
-  success: "#059669", successLight: "#D1FAE5",
-  warning: "#D97706", warningLight: "#FEF3C7",
-  danger: "#DC2626", dangerLight: "#FEE2E2",
-  info: "#2563EB", infoLight: "#DBEAFE",
-  purple: "#7C3AED", purpleLight: "#EDE9FE",
-  teal: "#0D9488", tealLight: "#CCFBF1",
-  pink: "#DB2777", pinkLight: "#FCE7F3",
-  orange: "#EA580C", orangeLight: "#FFEDD5",
+  navy: "#FFFFFF", navyMid: "#E2E8F0", navyLight: "#94A3B8", // text colors
+  slate: "#94A3B8", muted: "#64748B", border: "rgba(255, 255, 255, 0.1)", // borders
+  bg: "transparent", white: "rgba(255, 255, 255, 0.04)", // panels
+  accent: "#8B5CF6", accentLight: "rgba(139, 92, 246, 0.15)", accentDark: "#A78BFA",
+  success: "#10B981", successLight: "rgba(16, 185, 129, 0.15)",
+  warning: "#F59E0B", warningLight: "rgba(245, 158, 11, 0.15)",
+  danger: "#EF4444", dangerLight: "rgba(239, 68, 68, 0.15)",
+  info: "#3B82F6", infoLight: "rgba(59, 130, 246, 0.15)",
+  purple: "#8B5CF6", purpleLight: "rgba(139, 92, 246, 0.15)",
+  teal: "#14B8A6", tealLight: "rgba(20, 184, 166, 0.15)",
+  pink: "#EC4899", pinkLight: "rgba(236, 72, 153, 0.15)",
+  orange: "#F97316", orangeLight: "rgba(249, 115, 22, 0.15)",
 };
 
 const PRIORITY = {
@@ -148,7 +148,7 @@ function Pill({ children, active, onClick, color }) {
 function Modal({ title, onClose, children, width = 560, subtitle }) {
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(10,15,30,0.6)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 20 }} onClick={onClose}>
-      <div style={{ background: C.white, borderRadius: 16, width, maxWidth: "100%", maxHeight: "92vh", overflow: "auto", boxShadow: "0 32px 64px rgba(0,0,0,0.3)" }} onClick={e => e.stopPropagation()}>
+      <div style={{ background: C.white, backdropFilter: "blur(16px)", borderRadius: 16, width, maxWidth: "100%", maxHeight: "92vh", overflow: "auto", boxShadow: "0 32px 64px rgba(0,0,0,0.3)" }} onClick={e => e.stopPropagation()}>
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: "22px 26px 18px", borderBottom: `1px solid ${C.border}`, gap: 16 }}>
           <div>
             <h3 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: C.navy }}>{title}</h3>
@@ -172,12 +172,12 @@ function Field({ label, children, hint }) {
   );
 }
 
-const inp = { width: "100%", padding: "10px 13px", border: `1.5px solid ${C.border}`, borderRadius: 9, fontSize: 14, color: C.navy, outline: "none", boxSizing: "border-box", background: C.white, fontFamily: "inherit" };
+const inp = { width: "100%", padding: "10px 13px", border: `1.5px solid ${C.border}`, borderRadius: 9, fontSize: 14, color: C.navy, outline: "none", boxSizing: "border-box", background: C.white, backdropFilter: "blur(16px)", fontFamily: "inherit" };
 const btn = (v = "primary", size = "md") => ({
   padding: size === "sm" ? "7px 14px" : "10px 20px", borderRadius: 9, fontSize: size === "sm" ? 13 : 14, fontWeight: 600, cursor: "pointer", border: "none", transition: "all .15s", whiteSpace: "nowrap",
   background: v === "primary" ? C.accent : v === "danger" ? C.danger : v === "success" ? C.success : v === "warning" ? C.warning : C.bg,
   color: v === "ghost" ? C.slate : C.white,
-  ...(v === "ghost" && { border: `1.5px solid ${C.border}`, background: C.white }),
+  ...(v === "ghost" && { border: `1.5px solid ${C.border}`, background: C.white, backdropFilter: "blur(16px)" }),
 });
 
 function Spinner() {
@@ -524,7 +524,7 @@ export default function App() {
           </div>
           {/* Notif Panel */}
           {notifOpen && sidebarOpen && (
-            <div style={{ position: "absolute", bottom: 70, left: 248, width: 320, background: C.white, border: `1px solid ${C.border}`, borderRadius: 12, boxShadow: "0 16px 48px rgba(0,0,0,0.2)", zIndex: 500, overflow: "hidden" }}>
+            <div style={{ position: "absolute", bottom: 70, left: 248, width: 320, background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 12, boxShadow: "0 16px 48px rgba(0,0,0,0.2)", zIndex: 500, overflow: "hidden" }}>
               <div style={{ padding: "14px 16px 10px", borderBottom: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <span style={{ fontWeight: 700, fontSize: 14, color: C.navy }}>Notifications</span>
                 <button onClick={markNotifsRead} style={{ ...btn("ghost", "sm"), padding: "3px 8px", fontSize: 11 }}>Mark all read</button>
@@ -549,7 +549,7 @@ export default function App() {
         {/* Global search results */}
         {globalSearch && searchResults.length > 0 && (
           <div style={{ padding: "16px 24px 0" }}>
-            <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 12, overflow: "hidden", boxShadow: "0 8px 24px rgba(0,0,0,0.1)" }}>
+            <div style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 12, overflow: "hidden", boxShadow: "0 8px 24px rgba(0,0,0,0.1)" }}>
               <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.border}`, fontSize: 12, fontWeight: 700, color: C.muted, textTransform: "uppercase" }}>Search Results ({searchResults.length})</div>
               {searchResults.slice(0, 8).map(r => (
                 <div key={r.id} className="row-hover" onClick={() => {
@@ -643,8 +643,8 @@ function AuthScreen({ db, setDb, setSession, mode, setMode, toast }) {
   ];
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'DM Sans', sans-serif", background: C.bg }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');*{box-sizing:border-box}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}`}</style>
+    <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'Inter', sans-serif", background: `radial-gradient(circle at top right, rgba(139, 92, 246, 0.15), transparent 40%), radial-gradient(circle at bottom left, rgba(20, 184, 166, 0.1), transparent 40%), ${C.navy}` }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');*{box-sizing:border-box}body{margin:0;color:#f8fafc;background-color:#020617;}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px}::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.2)}`}</style>
 
       <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: 40 }}>
         <div style={{ width: 420, animation: "fadeIn .4s ease" }}>
@@ -691,7 +691,7 @@ function AuthScreen({ db, setDb, setSession, mode, setMode, toast }) {
                     document.getElementById("signin-btn").click();
                   }, 50);
                 }}
-                  style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "8px 10px", marginBottom: 4, borderRadius: 8, border: `1px solid ${C.accent}30`, background: C.white, cursor: "pointer", textAlign: "left" }}>
+                  style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "8px 10px", marginBottom: 4, borderRadius: 8, border: `1px solid ${C.accent}30`, background: C.white, backdropFilter: "blur(16px)", cursor: "pointer", textAlign: "left" }}>
                   <Avatar name={u.name} color={u.color} size={28} />
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 13, fontWeight: 700, color: C.navy }}>{u.name}</div>
@@ -705,11 +705,11 @@ function AuthScreen({ db, setDb, setSession, mode, setMode, toast }) {
         </div>
       </div>
 
-      <div style={{ width: 440, background: C.navy, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 60 }}>
+      <div style={{ width: 440, background: "rgba(255,255,255,0.02)", borderLeft: `1px solid ${C.border}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 60, backdropFilter: "blur(20px)" }}>
         <div style={{ width: "100%", maxWidth: 340 }}>
           <div style={{ fontSize: 40, marginBottom: 20 }}>⬡</div>
           <h2 style={{ color: C.white, fontSize: 30, fontWeight: 800, margin: "0 0 14px", lineHeight: 1.2 }}>Built for teams that ship</h2>
-          <p style={{ color: "#94A3B8", fontSize: 14, lineHeight: 1.8, marginBottom: 36 }}>Role-based access, live activity tracking, time logging, comments, and full project analytics — all in one place.</p>
+          <p style={{ color: C.slate, fontSize: 14, lineHeight: 1.8, marginBottom: 36 }}>Role-based access, live activity tracking, time logging, comments, and full project analytics — all in one place.</p>
           {[
             ["⚡", "Live activity & status tracking"],
             ["📋", "Kanban boards & priority queues"],
@@ -720,7 +720,7 @@ function AuthScreen({ db, setDb, setSession, mode, setMode, toast }) {
           ].map(([icon, text]) => (
             <div key={text} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
               <span style={{ fontSize: 15 }}>{icon}</span>
-              <span style={{ color: "#94A3B8", fontSize: 14 }}>{text}</span>
+              <span style={{ color: C.slate, fontSize: 14 }}>{text}</span>
             </div>
           ))}
         </div>
@@ -767,7 +767,7 @@ function DashboardView({ me, isAdmin, projects, tasks, users, db, onOpenProject,
           { label: "Blocked", value: blocked.length, color: blocked.length ? C.orange : C.success, sub: blocked.length ? "Unblock needed" : "None blocked", icon: "🚫" },
           { label: "My Tasks", value: myTasks.filter(t=>t.status!=="done").length, color: C.accent, sub: `${myDueSoon.length} due this week`, icon: "👤" },
         ].map(s => (
-          <div key={s.label} style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 13, padding: "18px 20px" }}>
+          <div key={s.label} style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 13, padding: "18px 20px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
               <span style={{ fontSize: 11, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: 0.5 }}>{s.label}</span>
               <span style={{ fontSize: 16 }}>{s.icon}</span>
@@ -793,7 +793,7 @@ function DashboardView({ me, isAdmin, projects, tasks, users, db, onOpenProject,
               const members = users.filter(u => p.memberIds.includes(u.id));
               const povd = pts.filter(t => isOverdue(t));
               return (
-                <div key={p.id} className="card-hover" onClick={() => onOpenProject(p.id)} style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 12, padding: "16px 18px", cursor: "pointer", transition: "all .2s" }}>
+                <div key={p.id} className="card-hover" onClick={() => onOpenProject(p.id)} style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 12, padding: "16px 18px", cursor: "pointer", transition: "all .2s" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <span style={{ width: 10, height: 10, borderRadius: "50%", background: p.color, display: "inline-block" }} />
@@ -840,7 +840,7 @@ function DashboardView({ me, isAdmin, projects, tasks, users, db, onOpenProject,
               );
             })}
             {myTasks.filter(t => t.status !== "done").length === 0 && (
-              <div style={{ padding: 24, textAlign: "center", color: C.muted, fontSize: 14, background: C.white, borderRadius: 12, border: `1px solid ${C.border}` }}>
+              <div style={{ padding: 24, textAlign: "center", color: C.muted, fontSize: 14, background: C.white, backdropFilter: "blur(16px)", borderRadius: 12, border: `1px solid ${C.border}` }}>
                 🎉 All caught up!
               </div>
             )}
@@ -946,7 +946,7 @@ function TasksView({ tasks, projects, users, me, isAdmin, isManagerOrAdmin, onEd
           const subtasksDone = t.subtasks?.filter(s => s.done).length || 0;
           const subtasksTotal = t.subtasks?.length || 0;
           return (
-            <div key={t.id} className="row-hover" onClick={() => onEdit(t)} style={{ background: C.white, border: `1px solid ${ovd ? C.danger + "44" : C.border}`, borderRadius: 11, padding: "14px 18px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer", transition: "all .15s" }}>
+            <div key={t.id} className="row-hover" onClick={() => onEdit(t)} style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${ovd ? C.danger + "44" : C.border}`, borderRadius: 11, padding: "14px 18px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer", transition: "all .15s" }}>
               <select value={t.status} onClick={e => e.stopPropagation()} onChange={e => { e.stopPropagation(); onStatusChange(t.id, e.target.value); }}
                 style={{ border: `1.5px solid ${st.color}44`, borderRadius: 7, background: st.bg, color: st.color, fontSize: 12, fontWeight: 700, padding: "5px 8px", cursor: "pointer", outline: "none", flexShrink: 0 }}>
                 {Object.entries(STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
@@ -967,7 +967,7 @@ function TasksView({ tasks, projects, users, me, isAdmin, isManagerOrAdmin, onEd
           );
         })}
         {filtered.length === 0 && (
-          <div style={{ padding: 48, textAlign: "center", color: C.muted, fontSize: 15, background: C.white, borderRadius: 14, border: `1px solid ${C.border}` }}>
+          <div style={{ padding: 48, textAlign: "center", color: C.muted, fontSize: 15, background: C.white, backdropFilter: "blur(16px)", borderRadius: 14, border: `1px solid ${C.border}` }}>
             No tasks match your filters.
           </div>
         )}
@@ -1010,7 +1010,7 @@ function ProjectView({ project, tasks, users, me, isAdmin, isManagerOrAdmin, com
       </div>
 
       {/* Stats bar */}
-      <div style={{ display: "grid", gridTemplateColumns: "2fr repeat(5, 1fr)", gap: 12, marginBottom: 18, background: C.white, border: `1px solid ${C.border}`, borderRadius: 12, padding: "14px 18px", alignItems: "center" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "2fr repeat(5, 1fr)", gap: 12, marginBottom: 18, background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 12, padding: "14px 18px", alignItems: "center" }}>
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
             <span style={{ fontSize: 12, color: C.muted }}>Progress</span>
@@ -1066,7 +1066,7 @@ function ProjectView({ project, tasks, users, me, isAdmin, isManagerOrAdmin, com
                     const subtasksDone = t.subtasks?.filter(s => s.done).length || 0;
                     const subtasksTotal = t.subtasks?.length || 0;
                     return (
-                      <div key={t.id} onClick={() => onViewTask(t)} style={{ background: C.white, border: `1px solid ${ovd ? C.danger + "50" : C.border}`, borderRadius: 9, padding: "12px", cursor: "pointer", transition: "all .15s" }}
+                      <div key={t.id} onClick={() => onViewTask(t)} style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${ovd ? C.danger + "50" : C.border}`, borderRadius: 9, padding: "12px", cursor: "pointer", transition: "all .15s" }}
                         className="card-hover">
                         {ovd && <div style={{ fontSize: 10, color: C.danger, fontWeight: 700, marginBottom: 4, textTransform: "uppercase" }}>⚠ Overdue</div>}
                         {t.priority === "critical" && <div style={{ fontSize: 10, color: C.danger, fontWeight: 700, marginBottom: 4 }}>🔴 Critical</div>}
@@ -1104,7 +1104,7 @@ function ProjectView({ project, tasks, users, me, isAdmin, isManagerOrAdmin, com
             const pr = PRIORITY[t.priority];
             const ovd = isOverdue(t);
             return (
-              <div key={t.id} onClick={() => onViewTask(t)} style={{ background: C.white, border: `1px solid ${ovd ? C.danger + "44" : C.border}`, borderRadius: 10, padding: "13px 16px", display: "grid", gridTemplateColumns: "140px 1fr 100px 80px 32px", gap: 14, alignItems: "center", cursor: "pointer" }} className="row-hover">
+              <div key={t.id} onClick={() => onViewTask(t)} style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${ovd ? C.danger + "44" : C.border}`, borderRadius: 10, padding: "13px 16px", display: "grid", gridTemplateColumns: "140px 1fr 100px 80px 32px", gap: 14, alignItems: "center", cursor: "pointer" }} className="row-hover">
                 <select value={t.status} onClick={e => e.stopPropagation()} onChange={e => { e.stopPropagation(); onStatusChange(t.id, e.target.value); }}
                   style={{ border: `1.5px solid ${st.color}44`, borderRadius: 7, background: st.bg, color: st.color, fontSize: 11, fontWeight: 700, padding: "4px 6px", cursor: "pointer", outline: "none" }}>
                   {Object.entries(STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
@@ -1126,7 +1126,7 @@ function ProjectView({ project, tasks, users, me, isAdmin, isManagerOrAdmin, com
       )}
 
       {subView === "timeline" && (
-        <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 12, overflow: "auto" }}>
+        <div style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 12, overflow: "auto" }}>
           <div style={{ padding: "16px 18px", borderBottom: `1px solid ${C.border}` }}>
             <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: C.navy }}>Timeline / Gantt</h3>
             <p style={{ margin: "4px 0 0", fontSize: 12, color: C.muted }}>Tasks by due date — {project.deadline ? `Project deadline: ${fmtDate(project.deadline)}` : "No deadline set"}</p>
@@ -1161,7 +1161,7 @@ function ProjectView({ project, tasks, users, me, isAdmin, isManagerOrAdmin, com
       )}
 
       {subView === "activity" && (
-        <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 12, overflow: "hidden" }}>
+        <div style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 12, overflow: "hidden" }}>
           <div style={{ padding: "16px 18px", borderBottom: `1px solid ${C.border}` }}>
             <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: C.navy }}>Project Activity</h3>
           </div>
@@ -1228,7 +1228,7 @@ function ActivityView({ db, users, me, isAdmin }) {
         </select>
       </div>
 
-      <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 14, overflow: "hidden" }}>
+      <div style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 14, overflow: "hidden" }}>
         {logs.length === 0 && <p style={{ padding: 32, textAlign: "center", color: C.muted }}>No activity yet.</p>}
         {logs.slice(0, 100).map((a, i) => {
           const user = users.find(u => u.id === a.userId);
@@ -1276,7 +1276,7 @@ function ReportsView({ db, me, isAdmin, projects, tasks, users }) {
           { label: "Completion Rate", value: `${tasks.length ? Math.round(tasks.filter(t => t.status === "done").length / tasks.length * 100) : 0}%`, color: C.success, icon: "✅" },
           { label: "Active Members", value: users.filter(u => u.online).length, color: C.info, icon: "👥" },
         ].map(m => (
-          <div key={m.label} style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 13, padding: "18px 20px" }}>
+          <div key={m.label} style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 13, padding: "18px 20px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
               <span style={{ fontSize: 11, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: 0.5 }}>{m.label}</span>
               <span style={{ fontSize: 16 }}>{m.icon}</span>
@@ -1288,7 +1288,7 @@ function ReportsView({ db, me, isAdmin, projects, tasks, users }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22, marginBottom: 22 }}>
         {/* Project health */}
-        <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 13, overflow: "hidden" }}>
+        <div style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 13, overflow: "hidden" }}>
           <div style={{ padding: "14px 18px", borderBottom: `1px solid ${C.border}` }}>
             <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: C.navy }}>Project Health</h3>
           </div>
@@ -1331,7 +1331,7 @@ function ReportsView({ db, me, isAdmin, projects, tasks, users }) {
         </div>
 
         {/* Member performance */}
-        <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 13, overflow: "hidden" }}>
+        <div style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 13, overflow: "hidden" }}>
           <div style={{ padding: "14px 18px", borderBottom: `1px solid ${C.border}` }}>
             <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: C.navy }}>Member Performance</h3>
           </div>
@@ -1366,7 +1366,7 @@ function ReportsView({ db, me, isAdmin, projects, tasks, users }) {
       </div>
 
       {/* Priority breakdown */}
-      <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 13, padding: "18px 22px" }}>
+      <div style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 13, padding: "18px 22px" }}>
         <h3 style={{ margin: "0 0 16px", fontSize: 15, fontWeight: 700, color: C.navy }}>Tasks by Priority</h3>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
           {Object.entries(PRIORITY).map(([key, pr]) => {
@@ -1408,7 +1408,7 @@ function TeamView({ users, projects, tasks, onEdit, onNew }) {
           const overdue = uTasks.filter(t => isOverdue(t)).length;
           const lastActive = u.lastActive ? fmtAgo(u.lastActive) : "Never";
           return (
-            <div key={u.id} className="card-hover" style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 14, padding: 22, cursor: "pointer", transition: "all .2s" }} onClick={() => onEdit(u)}>
+            <div key={u.id} className="card-hover" style={{ background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 14, padding: 22, cursor: "pointer", transition: "all .2s" }} onClick={() => onEdit(u)}>
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <Avatar name={u.name} color={u.color} size={44} online={u.online} />
@@ -1476,7 +1476,7 @@ function SettingsView({ db, me, setDb, toast }) {
           { label: "Activity Logs", value: db.activityLog?.length || 0 },
           { label: "Time Logs", value: db.timeLogs?.length || 0 },
         ].map(s => (
-          <div key={s.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", background: C.white, border: `1px solid ${C.border}`, borderRadius: 10 }}>
+          <div key={s.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", background: C.white, backdropFilter: "blur(16px)", border: `1px solid ${C.border}`, borderRadius: 10 }}>
             <span style={{ fontSize: 14, color: C.slate }}>{s.label}</span>
             <span style={{ fontSize: 16, fontWeight: 800, color: C.navy }}>{s.value}</span>
           </div>
