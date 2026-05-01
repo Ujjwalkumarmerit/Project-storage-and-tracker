@@ -1,15 +1,17 @@
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
 require('dotenv').config();
 
-const authRoutes = require('./routes/auth');
-const projectRoutes = require('./routes/projects');
-const taskRoutes = require('./routes/tasks');
 const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 const app = express();
-const prisma = new PrismaClient();
-const PORT = process.env.PORT || 5000;
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: { origin: '*' } // Allow all for now
+});
 
 app.use(cors({
   origin: [
@@ -21,9 +23,10 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Set up Prisma on req so routes can use it without multiple imports
+// Set up Prisma and IO on req so routes can use it without multiple imports
 app.use((req, res, next) => {
   req.prisma = prisma;
+  req.io = io;
   next();
 });
 
@@ -32,40 +35,40 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/tasks', taskRoutes);
+// Socket.io connection handling
+io.on('connection', async (socket) => {
+  console.log('User connected:', socket.id);
+  
+  socket.on('authenticate', async (userId) => {
+    socket.userId = userId;
+    socket.join(`user_${userId}`);
+    // Update user online status
+    try {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { online: true, lastActive: new Date() }
+      });
+      io.emit('user_status_change', { userId, online: true });
+    } catch(err) { console.error(err); }
+  });
 
-// Dashboard stats endpoint
-app.get('/api/dashboard', require('./middleware/auth').auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const role = req.user.role;
-    
-    let stats = {};
-    
-    if (role === 'ADMIN') {
-       const totalProjects = await prisma.project.count();
-       const totalTasks = await prisma.task.count();
-       const overdueTasks = await prisma.task.count({
-          where: { dueDate: { lt: new Date() }, status: { not: 'DONE' } }
-       });
-       stats = { totalProjects, totalTasks, overdueTasks };
-    } else {
-       const userProjects = await prisma.projectMember.count({ where: { userId } });
-       const assignedTasks = await prisma.task.count({ where: { assigneeId: userId } });
-       const overdueTasks = await prisma.task.count({
-          where: { assigneeId: userId, dueDate: { lt: new Date() }, status: { not: 'DONE' } }
-       });
-       stats = { userProjects, assignedTasks, overdueTasks };
+  socket.on('disconnect', async () => {
+    if (socket.userId) {
+      try {
+        await prisma.user.update({
+          where: { id: socket.userId },
+          data: { online: false, lastActive: new Date() }
+        });
+        io.emit('user_status_change', { userId: socket.userId, online: false });
+      } catch(err) {}
     }
-    
-    res.json(stats);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch dashboard stats' });
-  }
+  });
 });
 
-app.listen(PORT, () => {
+// Import new aggregated API router
+app.use('/api', require('./routes/api'));
+
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
