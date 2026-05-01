@@ -1,77 +1,104 @@
-# Project Management Hub
-
-A modern, full-stack project management application featuring role-based access control (Admin/Member), task tracking, dynamic dashboards, and a beautiful dark-mode glassmorphism aesthetic.
-
-## Features
-- **Authentication**: JWT-based Signup/Login.
-- **Role-Based Access**: Admins can create projects and tasks, and add members. Members can only view their projects and update task statuses.
-- **Dashboard**: High-level metrics for Total/Assigned Projects and Tasks, including Overdue Task tracking.
-- **Project & Team Management**: Admins can invite registered users to specific projects.
-- **Task Board**: Dynamic status board (To Do, In Progress, Review, Done).
-
-## Tech Stack
-- **Frontend**: React (Vite), React Router, Axios, Vanilla CSS (Glassmorphism design).
-- **Backend**: Node.js, Express, Prisma ORM.
-- **Database**: PostgreSQL.
+<div align="center">
+  <img src="./frontend/public/favicon.svg" width="80" alt="ProjectFlow Logo" />
+  <h1>ProjectFlow 🚀</h1>
+  <p><b>A modern, full-stack project management hub built for teams that ship.</b></p>
+  <p>
+    <img alt="Node.js" src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+    <img alt="React" src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+    <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
+    <img alt="Prisma" src="https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white" />
+    <img alt="Socket.io" src="https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101" />
+  </p>
+</div>
 
 ---
 
-## Local Development Setup
+## ✨ Features
 
-### 1. Database Setup
-Ensure you have PostgreSQL running locally or use a cloud database (like Railway).
-Create a `.env` file in the `backend` directory:
-```
-DATABASE_URL="postgresql://user:password@localhost:5432/project_manager?schema=public"
-JWT_SECRET="your_super_secret_key"
-PORT=5000
-```
+ProjectFlow is a fully-featured, production-ready application designed with a premium **Dark Mode Glassmorphism** aesthetic. 
 
-### 2. Backend
-```bash
-cd backend
-npm install
-npx prisma db push
-npm run dev
-```
-
-### 3. Frontend
-Create a `.env` file in the `frontend` directory:
-```
-VITE_API_URL=http://localhost:5000/api
-```
-```bash
-cd frontend
-npm install
-npm run dev
-```
+- **Live Real-Time Syncing:** Powered by `Socket.io`, all updates to tasks, comments, and project statuses are instantly synced across all connected team members without refreshing the page.
+- **Role-Based Access Control (RBAC):** Granular permissions supporting `Admin`, `Manager`, `Member`, and `Viewer` roles. Control exactly who can create projects, assign tasks, or just view progress.
+- **Dynamic Kanban Boards:** Drag-and-drop enabled status boards (Backlog, To Do, In Progress, Review, Done) to visualize team velocity.
+- **Activity Feeds & Comments:** Every action (status changes, task assignments) is automatically logged to a chronological project activity feed. Inline commenting enables rapid team communication.
+- **Time Logging & Estimates:** Track estimated vs actual hours on every task to improve future sprint planning.
+- **Interactive Demo Mode:** Comes with a built-in pre-seeded database, including fully populated users, projects, and an active task board for instant testing.
 
 ---
 
-## Deployment to Railway 🚀
+## 🛠️ Tech Stack
 
-This repository is structured as a monorepo containing both the frontend and backend. Follow these steps to deploy it live on Railway:
+**Frontend:**
+- React 18 (Vite)
+- Custom Vanilla CSS (Glassmorphism & CSS Modules)
+- Axios (API Integration)
 
-### Step 1: Provision the Database
-1. Go to your Railway Dashboard.
-2. Click **New Project** -> **Provision PostgreSQL**.
+**Backend:**
+- Node.js & Express.js
+- Prisma ORM
+- Socket.io (Real-time events)
+- JSON Web Tokens (JWT) & bcrypt (Authentication)
 
-### Step 2: Deploy the Backend
-1. In the same Railway project, click **New** -> **GitHub Repo** and select this repository.
-2. After the service is created, go to its **Settings**.
-3. Under **Root Directory**, type `/backend` and hit Enter.
-4. Go to **Variables** and add:
-   - `JWT_SECRET`: Any secure random string.
-   - `DATABASE_URL`: Set this using the Reference feature to link to your PostgreSQL database's `DATABASE_URL`.
-   - `PORT`: `5000` (Railway will automatically map this).
-5. Railway will detect `package.json` in the `/backend` folder and start the server using `npm start`. Note: Make sure to run migrations or db push on Railway (you can add `"build": "prisma generate && prisma db push"` to backend scripts).
+**Database:**
+- PostgreSQL (Neon.tech recommended)
 
-### Step 3: Deploy the Frontend
-1. Click **New** -> **GitHub Repo** again and select the *same* repository.
-2. Go to the new service's **Settings**.
-3. Under **Root Directory**, type `/frontend` and hit Enter.
-4. Go to **Variables** and add:
-   - `VITE_API_URL`: Set this to the public domain URL of your backend service (e.g., `https://your-backend-production.up.railway.app/api`).
-5. Railway will automatically detect Vite, build the static assets, and serve them. Ensure the backend domain is generated first so you can provide it to the frontend.
+---
 
-Enjoy your fully functional live Project Management Web App!
+## 🚀 Deployment Guide (Render)
+
+ProjectFlow is designed to be deployed as a **single, unified Web Service** to drastically simplify CI/CD pipelines. The repository contains a custom `build.sh` script that compiles the React frontend, installs backend dependencies, generates the Prisma client, and synchronizes the database schema all in one step!
+
+### Step 1: Prepare your Database
+1. Create a free PostgreSQL database on [Neon.tech](https://neon.tech) or a similar provider.
+2. Copy your Connection String (`DATABASE_URL`).
+
+### Step 2: Deploy to Render
+1. Go to your [Render Dashboard](https://dashboard.render.com/) and click **New** -> **Web Service**.
+2. Connect this GitHub repository.
+3. Use the following configuration:
+   - **Root Directory:** *(leave completely blank)*
+   - **Environment:** `Node`
+   - **Build Command:** `bash build.sh`
+   - **Start Command:** `cd backend && npm start`
+4. Expand **Environment Variables** and add:
+   - `DATABASE_URL` : *(Your PostgreSQL Connection String)*
+   - `JWT_SECRET` : *(A secure random string, e.g., `super_secret_key_123`)*
+   - `NODE_ENV` : `production`
+   - `NODE_VERSION` : `20.x`
+5. Click **Deploy Web Service**! Render will automatically build the React app, push the database schema, and launch the server.
+
+---
+
+## 💻 Local Development
+
+Want to run the app locally? It's incredibly simple:
+
+1. Clone the repository and setup your `DATABASE_URL` inside `backend/.env`.
+2. Run the `build.sh` script from the root directory to install all dependencies for both frontend and backend simultaneously.
+   ```bash
+   bash build.sh
+   ```
+3. Seed the database with demo users and projects:
+   ```bash
+   cd backend
+   node prisma/seed.js
+   ```
+4. Start the backend server (which will also serve the frontend locally):
+   ```bash
+   npm start
+   ```
+5. Open your browser to `http://localhost:5000`
+
+---
+
+## 🎨 UI Showcase
+
+The application utilizes advanced CSS techniques to achieve a modern aesthetic:
+- **Radial Gradients:** Deep space backgrounds (`#020617`) with vibrant Teal and Purple glows.
+- **Backdrop Filters:** Semi-transparent glass panels utilizing `backdrop-filter: blur(20px)` for high-end UI elevation.
+- **Neon Accents:** Primary actions and active states glow with soft box shadows to intuitively guide user interactions.
+
+<br>
+<div align="center">
+  <i>Built with ❤️ using React, Prisma, and PostgreSQL</i>
+</div>
