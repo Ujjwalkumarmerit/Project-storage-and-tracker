@@ -604,7 +604,7 @@ export default function App() {
 
 // ─── AUTH SCREEN ──────────────────────────────────────────────────────────────
 function AuthScreen({ db, setDb, setSession, mode, setMode, toast }) {
-  const [form, setForm] = useState({ name: "", email: "", password: "", dept: "Engineering", role: "member" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", dept: "Engineering", role: "admin" });
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -661,7 +661,7 @@ function AuthScreen({ db, setDb, setSession, mode, setMode, toast }) {
               <Field label="Full Name"><input style={inp} value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Your full name" /></Field>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                 <Field label="Department"><select style={inp} value={form.dept} onChange={e => setForm(f => ({ ...f, dept: e.target.value }))}>{["Engineering","Design","Product","Marketing","Sales","Operations","HR","Finance"].map(d => <option key={d}>{d}</option>)}</select></Field>
-                <Field label="Role"><select style={inp} value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))}><option value="member">Member</option><option value="viewer">Viewer</option></select></Field>
+                <Field label="Role"><select style={inp} value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))}><option value="admin">Admin</option><option value="manager">Manager</option><option value="member">Member</option><option value="viewer">Viewer</option></select></Field>
               </div>
             </>
           )}
